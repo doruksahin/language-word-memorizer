@@ -1,10 +1,29 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Route,
+  Link,
+} from "react-router-dom";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+import "./index.css";
+import Question from "./Question";
+import Upload from "./Upload";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Upload />,
+  },
+  {
+    path: "question",
+    element: <Question />,
+  },
+]);
+
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
-)
+);
