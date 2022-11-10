@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
 import leftArrow from "./assets/left-arrow.svg";
 import rightArrow from "./assets/right-arrow.svg";
-
+import FileUploader from "./components/file-uploader";
+import excelSvg from "./assets/excel2.svg";
 export default function Question() {
   return (
     <div className="flex items-center flex-col bg-blue-300 w-screen h-screen">
       <QuestionCard />
       <Progress />
+      <FileUploader className={"mt-10"}>
+        <img className="w-6 h-6 mr-2" src={excelSvg} />
+      </FileUploader>
     </div>
   );
 }
