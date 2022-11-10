@@ -1,22 +1,42 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import leftArrow from "../assets/left-arrow.svg";
 import rightArrow from "../assets/right-arrow.svg";
 import FileUploader from "../components/file-uploader";
 import excelSvg from "../assets/excel2.svg";
+import QuestionsAPI from "../services/QuestionsAPI";
 
 export default function Question() {
+  const [questions, setQuestions] = useState();
+  const [progress, setProgress] = useState(0);
+
+  function extractExcel(file) {
+    const data = new FormData();
+    data.append("file", file);
+    QuestionsAPI.getQuestions(data, getQuestionsCb);
+  }
+
+  function getQuestionsCb(isSuccess, data) {
+    console.log("data", data);
+    setQuestions(data);
+  }
+
   return (
     <div className="flex items-center flex-col bg-blue-300 w-screen h-screen">
-      <QuestionCard />
-      <Progress />
-      <FileUploader className={"mt-10"}>
+      {questions ? (
+        <QuestionCard
+          totalQuestion={questions.length}
+          currentQuestion={progress}
+        />
+      ) : undefined}
+      <Progress questions={questions} currentQuestion={progress} />
+      <FileUploader className={"mt-10"} handleFileUpload={extractExcel}>
         <img className="w-6 h-6 mr-2" src={excelSvg} />
       </FileUploader>
     </div>
   );
 }
 
-function QuestionCard() {
+function QuestionCard({ totalQuestion, currentQuestion }) {
   return (
     <div className="w-screen sm:max-w-min h-min p-6 items-center mt-4 rounded-xl bg-white shadow-lg">
       <div className="text-center text-xl font-bold">Cooking</div>
@@ -51,16 +71,20 @@ function Options() {
   return listOptions;
 }
 
-function Progress() {
+function Progress({ questions }) {
   const progresses = [null, null, null, null, null, true, false];
-  return (
-    <div className="flex flex-col items-center mt-4">
-      Progress
-      <div className="w-40 flex-wrap flex self-start bg-blue-200">
-        {progresses.map((item) => (
-          <div className="border border-red-400 w-[20%] h-8"></div>
-        ))}
+  if (questions) {
+    return (
+      <div className="flex flex-col items-center mt-4">
+        Progress
+        <div className="w-40 flex-wrap flex self-start bg-blue-200">
+          {questions.map((question) => (
+            <div className="border border-red-400 w-[20%] h-8"></div>
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return <></>;
+  }
 }
