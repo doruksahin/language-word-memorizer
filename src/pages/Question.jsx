@@ -5,14 +5,14 @@ import FileUploader from "../components/file-uploader";
 import excelSvg from "../assets/excel2.svg";
 import QuestionsAPI from "../services/QuestionsAPI";
 
+//TODO: Doğru ya da yanlış durumunda ses çıkart
+//TODO: hafıza olayı
+//TODO: google translate ile türkçe çevirisini bul
+//TODO: İnci'ye yanlış yazılan birkaç kelimenin olduğunu söyle.
+//LEARNED: questions itemlarından birinin içeriğini değiştirdim ama useEffect çalışmadı.
 export default function Question() {
   const [questions, setQuestions] = useState();
   const [questionIndex, setQuestionIndex] = useState(0);
-  const [choosedAnswer, setChoosedAnswer] = useState(null);
-
-  useEffect(() => {
-    console.log("question", questions);
-  }, [questions]);
 
   function extractExcel(file) {
     const data = new FormData();
@@ -20,8 +20,11 @@ export default function Question() {
     QuestionsAPI.getQuestions(data, getQuestionsCb);
   }
 
+  useEffect(() => {
+    console.log("questionsss", questions);
+  }, [questions]);
+
   function getQuestionsCb(isSuccess, data) {
-    console.log("data", data);
     setQuestions(
       data.map((datum) => {
         datum.isSuccess = null;
@@ -30,9 +33,11 @@ export default function Question() {
     );
   }
 
-  function checkQuestionAnswer() {
-    if (choosedAnswer) {
-      if (choosedAnswer === questions[questionIndex].answer) {
+  function checkQuestionAnswer(answer) {
+    console.log("questionIndex", questionIndex);
+    console.log("q-answer", questions[questionIndex].answer);
+    if (answer) {
+      if (answer === questions[questionIndex].answer) {
         setQuestions((current) => {
           current[questionIndex].isSuccess = true;
           return current;
@@ -48,18 +53,23 @@ export default function Question() {
 
   function increaseProgress() {
     if (questionIndex < questions.length - 1) {
-      checkQuestionAnswer();
       setQuestionIndex((prev) => prev + 1);
-      setChoosedAnswer(null);
+    } else {
+      setQuestionIndex(0);
     }
   }
 
   function decreaseProgress() {
     if (questionIndex > 0) {
-      checkQuestionAnswer();
       setQuestionIndex((prev) => prev - 1);
-      setChoosedAnswer(null);
+    } else {
+      setQuestionIndex(questions.length - 1);
     }
+  }
+
+  function increaseKahootProgress(answer) {
+    checkQuestionAnswer(answer);
+    increaseProgress();
   }
 
   return (
@@ -69,8 +79,7 @@ export default function Question() {
           question={questions[questionIndex]}
           increaseProgress={increaseProgress}
           decreaseProgress={decreaseProgress}
-          choosedAnswer={choosedAnswer}
-          setChoosedAnswer={setChoosedAnswer}
+          increaseKahootProgress={increaseKahootProgress}
         />
       ) : undefined}
       <ProgressBar questionIndex={questionIndex} questions={questions} />
@@ -90,17 +99,15 @@ function QuestionCard({
   question,
   increaseProgress,
   decreaseProgress,
-  choosedAnswer,
-  setChoosedAnswer,
+  increaseKahootProgress,
 }) {
   return (
-    <div className="w-screen sm:max-w-min h-min p-6 items-center mt-4 rounded-xl bg-white shadow-lg">
+    <div className="w-screen sm:max-w-lg h-min p-6 items-center mt-4 rounded-xl bg-white shadow-lg">
       <div className="text-center text-xl font-bold">{question.word}</div>
-      <div className="flex flex-col sm:flex-row justify-center mx-24 mt-4 items-center gap-2 sm:gap-12">
-        <OptionsRadio
+      <div className="flex flex-col sm:flex-row justify-center mt-4 items-center flex-wrap">
+        <OptionsKahoot
           options={question.options}
-          choosedAnswer={choosedAnswer}
-          setChoosedAnswer={setChoosedAnswer}
+          increaseKahootProgress={increaseKahootProgress}
         />
       </div>
       <div className="flex mt-6 justify-between">
@@ -119,13 +126,25 @@ function QuestionCard({
   );
 }
 
-function OptionsKahoot({ options }) {
-  const listOptions = options.map((option, index) => (
-    <div key={index} className="whitespace-nowrap">
-      <div className="">{option}</div>
-    </div>
-  ));
-
+function OptionsKahoot({ options, increaseKahootProgress }) {
+  const colors = [
+    { normal: "bg-red-500", hover: "hover:bg-red-400" },
+    { normal: "bg-blue-500", hover: "hover:bg-blue-400" },
+    { normal: "bg-yellow-500", hover: "hover:bg-yellow-400" },
+    { normal: "bg-green-500", hover: "hover:bg-green-400" },
+  ];
+  const listOptions = options.map((option, index) => {
+    const color = colors[index];
+    return (
+      <div
+        key={index}
+        className={`group ${color.normal} ${color.hover} border text-center border-black w-[50%] py-4 cursor-pointer`}
+        onClick={() => increaseKahootProgress(option)}
+      >
+        <p className="group-hover:text-white">{option}</p>
+      </div>
+    );
+  });
   return listOptions;
 }
 
@@ -172,28 +191,26 @@ function ProgressBar({ questionIndex, questions }) {
 
 function ProgressItem({ questionIndex, isSuccess, index }) {
   var progressCircle;
+  var bgColor;
   if (questionIndex == index) {
-    progressCircle = <div className="bg-white h-4 w-4 rounded-full"></div>;
+    progressCircle = (
+      <div key={index} className="bg-white h-4 w-4 rounded-full"></div>
+    );
   }
   if (isSuccess === true) {
-    return (
-      <div className="flex items-center justify-center bg-green-400 w-[20%] h-8">
-        {progressCircle}
-      </div>
-    );
+    bgColor = "bg-green-400";
   } else if (isSuccess === false) {
-    return (
-      <div className="flex items-center justify-center bg-red-400 w-[20%] h-8">
-        {progressCircle}
-      </div>
-    );
+    bgColor = "bg-red-400";
   } else {
-    return (
-      <div className="flex items-center justify-center border border-white bg-black w-[20%] h-8">
-        {progressCircle}
-      </div>
-    );
+    bgColor = "bg-black";
   }
 
-  return { progressBox };
+  return (
+    <div
+      key={index}
+      className={`flex items-center justify-center border border-white ${bgColor} w-[20%] h-8`}
+    >
+      {progressCircle}
+    </div>
+  );
 }
