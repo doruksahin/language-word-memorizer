@@ -19,4 +19,4 @@ RUN yarn install --pure-lockfile
 EXPOSE 8080
 
 # start app
-CMD ["yarn", "dev", "--host"]
+CMD ["yarn", "serve", "--host"]

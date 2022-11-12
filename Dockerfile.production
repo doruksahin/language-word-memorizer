@@ -15,7 +15,6 @@ COPY . ./
 
 
 RUN yarn global add env-cmd
-RUN yarn add serve -g
 RUN yarn install --pure-lockfile
 
 
