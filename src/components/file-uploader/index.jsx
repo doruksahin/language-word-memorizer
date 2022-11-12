@@ -26,7 +26,7 @@ export default function FileUploader({
   return (
     <div className={className}>
       <button
-        className="flex bg-blue-600 px-5 py-3 rounded-3xl text-white"
+        className="flex bg-blue-600 dark:bg-gray-700 px-5 py-3 rounded-3xl text-white"
         onClick={handleClick}
       >
         {children}

@@ -74,7 +74,7 @@ export default function Question() {
   }
 
   return (
-    <div className="flex items-center flex-col bg-blue-300 w-screen h-screen">
+    <div className="flex items-center flex-col bg-blue-300 dark:bg-gray-400 w-screen h-screen">
       <ModeSwitcher />
       {questions ? (
         <QuestionCard
@@ -104,7 +104,7 @@ function QuestionCard({
   increaseKahootProgress,
 }) {
   return (
-    <div className="w-screen sm:max-w-lg h-min p-6 items-center mt-4 rounded-xl bg-white shadow-lg">
+    <div className="w-screen sm:max-w-lg h-min p-6 items-center mt-4 rounded-xl bg-white dark:bg-gray-500 shadow-lg">
       <div className="text-center text-xl font-bold">{question.word}</div>
       <div className="flex flex-col sm:flex-row justify-center mt-4 items-center flex-wrap">
         <OptionsKahoot
@@ -130,10 +130,22 @@ function QuestionCard({
 
 function OptionsKahoot({ options, increaseKahootProgress }) {
   const colors = [
-    { normal: "bg-red-500", hover: "hover:bg-red-400" },
-    { normal: "bg-blue-500", hover: "hover:bg-blue-400" },
-    { normal: "bg-yellow-500", hover: "hover:bg-yellow-400" },
-    { normal: "bg-green-500", hover: "hover:bg-green-400" },
+    {
+      normal: "bg-red-500 dark:bg-red-800",
+      hover: "hover:bg-red-400 dark:hover:bg-red-700",
+    },
+    {
+      normal: "bg-blue-500 dark:bg-blue-800",
+      hover: "hover:bg-blue-400 dark:hover:bg-blue-700",
+    },
+    {
+      normal: "bg-yellow-500 dark:bg-yellow-800",
+      hover: "hover:bg-yellow-400 dark:hover:bg-yellow-700",
+    },
+    {
+      normal: "bg-green-500 dark:bg-green-800",
+      hover: "hover:bg-green-400 dark:hover:bg-green-700",
+    },
   ];
   const listOptions = options.map((option, index) => {
     const color = colors[index];
@@ -181,7 +193,7 @@ function ProgressBar({ questionIndex, questions }) {
     return (
       <div className="flex flex-col items-center mt-4">
         Progress
-        <div className="w-40 flex-wrap flex self-start bg-blue-200">
+        <div className="w-40 flex-wrap flex self-start">
           {questionsToBeRendered}
         </div>
       </div>
@@ -196,13 +208,16 @@ function ProgressItem({ questionIndex, isSuccess, index }) {
   var bgColor;
   if (questionIndex == index) {
     progressCircle = (
-      <div key={index} className="bg-white h-4 w-4 rounded-full"></div>
+      <div
+        key={index}
+        className="bg-white dark:bg-gray-300 h-4 w-4 rounded-full"
+      ></div>
     );
   }
   if (isSuccess === true) {
-    bgColor = "bg-green-400";
+    bgColor = "bg-green-400 dark:bg-green-700";
   } else if (isSuccess === false) {
-    bgColor = "bg-red-400";
+    bgColor = "bg-red-400 dark:bg-red-700";
   } else {
     bgColor = "bg-black";
   }
@@ -210,7 +225,7 @@ function ProgressItem({ questionIndex, isSuccess, index }) {
   return (
     <div
       key={index}
-      className={`flex items-center justify-center border border-white ${bgColor} w-[20%] h-8`}
+      className={`flex items-center justify-center border border-white dark:border-black ${bgColor} w-[20%] h-8`}
     >
       {progressCircle}
     </div>
