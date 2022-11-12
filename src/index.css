@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .example {
+    @apply mr-3;
+  }
+
+  .top-navigation-icon:first {
+    @apply ml-auto mr-4;
+  }
+}

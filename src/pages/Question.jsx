@@ -104,7 +104,7 @@ function QuestionCard({
   increaseKahootProgress,
 }) {
   return (
-    <div className="w-screen sm:max-w-lg h-min p-6 items-center mt-4 rounded-xl bg-white dark:bg-gray-500 shadow-lg">
+    <div className="w-screen sm:max-w-lg h-min p-6 items-center mt-16 rounded-xl bg-white dark:bg-gray-500 shadow-lg">
       <div className="text-center text-xl font-bold">{question.word}</div>
       <div className="flex flex-col sm:flex-row justify-center mt-4 items-center flex-wrap">
         <OptionsKahoot
@@ -225,7 +225,7 @@ function ProgressItem({ questionIndex, isSuccess, index }) {
   return (
     <div
       key={index}
-      className={`flex items-center justify-center border border-white dark:border-black ${bgColor} w-[20%] h-8`}
+      className={`flex items-center justify-center border border-white dark:border-gray-700 ${bgColor} w-[20%] h-8`}
     >
       {progressCircle}
     </div>
