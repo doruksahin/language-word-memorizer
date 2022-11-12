@@ -4,6 +4,7 @@ import rightArrow from "../assets/right-arrow.svg";
 import FileUploader from "../components/file-uploader";
 import excelSvg from "../assets/excel2.svg";
 import QuestionsAPI from "../services/QuestionsAPI";
+import ModeSwitcher from "../components/mode-switcher";
 
 //TODO: Doğru ya da yanlış durumunda ses çıkart
 //TODO: hafıza olayı
@@ -74,6 +75,7 @@ export default function Question() {
 
   return (
     <div className="flex items-center flex-col bg-blue-300 w-screen h-screen">
+      <ModeSwitcher />
       {questions ? (
         <QuestionCard
           question={questions[questionIndex]}
