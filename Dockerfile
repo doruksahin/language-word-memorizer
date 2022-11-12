@@ -16,9 +16,6 @@ COPY . ./
 RUN yarn global add env-cmd
 RUN yarn install --pure-lockfile
 
-
-
-
 EXPOSE 8080
 
 # start app

@@ -3,7 +3,7 @@ import axios from "axios";
 const QuestionsAPI = {
   getQuestions: (data, callback) => {
     axios
-      .post(`http://localhost:3000/questions`, data)
+      .post(import.meta.env.VITE_SERVER_URL + `/questions`, data)
       .then((response) => {
         console.log("aaa");
         const questions = response.data;
