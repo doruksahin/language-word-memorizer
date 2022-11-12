@@ -9,15 +9,10 @@ import {
 
 import "./index.css";
 import Question from "./pages/Question";
-import Upload from "./pages/Upload";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Upload />,
-  },
-  {
-    path: "question",
     element: <Question />,
   },
 ]);
